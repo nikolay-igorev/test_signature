@@ -48,6 +48,8 @@ def get_certificate(private_key, public_key):
         private_key=private_key, algorithm=hashes.SHA256(),
     )
     cert_string = certificate.public_bytes(Encoding.PEM)
+    with open("cert.pem", "w") as cert_file:
+        cert_file.write(cert_string.decode())
 
     return cert_string
 
@@ -55,7 +57,7 @@ def get_certificate(private_key, public_key):
 def pkcs7_signature_build(file, certificate, private_key):
 
     cert = x509.load_pem_x509_certificate(certificate)
-    private_bytes_string = private_key.private_bytes(Encoding.PEM, PrivateFormat.PKCS8, NoEncryption())
+    private_bytes_string = private_key.private_bytes(Encoding.PEM, PrivateFormat.TraditionalOpenSSL, NoEncryption())
 
     key = serialization.load_pem_private_key(private_bytes_string, None)
     options = [pkcs7.PKCS7Options.DetachedSignature]
@@ -69,7 +71,7 @@ def pkcs7_signature_build(file, certificate, private_key):
     )
 
     with open("pkcs7.p7s", "w") as pkcs7_file:
-        print("{}".format(pkcs7_sign), file=pkcs7_file)
+        pkcs7_file.write(pkcs7_sign.decode())
 
 
 def main():
