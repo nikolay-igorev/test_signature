@@ -17,5 +17,6 @@ env/
 *.pyc
 *.db
 *.pid
-*.p7s
 *.pem
+*.p7s
+
